@@ -190,13 +190,17 @@ Gameplay.prototype =
 		if(cursors.up.isDown)
 		{
 			player.body.velocity.y = -150;
-			player.animations.play('up');
 		}
 		else if(cursors.down.isDown)
 		{
 			player.body.velocity.y = 80;
-			player.animations.play('down');
 		}
+
+		// playing animations
+		if(player.body.velocity.y <= 0) 
+			player.animations.play('up');
+		else if(player.body.velocity.y > 0)
+			player.animations.play('down');
 
 		// if the spacebar was pressed, move back to first state
 		if(this.changeKey.justPressed())
