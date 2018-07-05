@@ -171,13 +171,13 @@ Gameplay.prototype =
 		var randSpawn = Math.random() * (10000 - 1) + 1;
 
 		// if the randSpawn is less than 150, then spawn a bubble
-		if(randSpawn < 150)
+		if(randSpawn > 100 && randSpawn < 1500)
 		{
 			// calling function to create bubble
 			createBubble();
 		} 
 		// if the randSPawn is between 150 and 200, then spawn a spike
-		else if(randSpawn > 150 && randSpawn < 200)
+		else if(randSpawn < 100)
 		{
 			createSpike();
 		}
