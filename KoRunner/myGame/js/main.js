@@ -202,14 +202,6 @@ Gameplay.prototype =
 		else if(player.body.velocity.y > 0)
 			player.animations.play('down');
 
-		// if the spacebar was pressed, move back to first state
-		if(this.changeKey.justPressed())
-		{
-			// debugging
-			console.log('Changing states...');
-			game.state.start('Gameover');
-		}
-
 		// if player overlaps with bubble, then run collectBubble function
 		game.physics.arcade.overlap(player, bubbles, collectBubble, null, this);
 
