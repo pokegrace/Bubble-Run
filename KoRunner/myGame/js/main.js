@@ -21,6 +21,9 @@ Menu.prototype =
 
 		// loading sound asset
 		game.load.audio('bubble', 'assets/audio/bubble.mp3');
+
+		// loading font asset
+		game.load.bitmapFont('font', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
 	},
 	create: function()
 	{
@@ -125,7 +128,8 @@ Gameplay.prototype =
 		plop = game.add.audio('plop');
 
 		// adding score text to game: (x, y, default text, font details)
-		scoreText = game.add.text(16, 16, 'Score: 0', {fontSize: '24px', fill: '#9FAFD9'});
+		scoreText = game.add.bitmapText(16, 16, 'font', 'Score: 0', 24);
+		scoreText.tint = 0x9FAFD9;
 
 		// for keyboard press
 		this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -234,6 +238,12 @@ Gameover.prototype =
 		this.background = game.add.tileSprite(0, 0, game.width, game.height, 'background');
 		game.add.sprite(140, 20, 'gameoverscreen');
 
+		// showing player score
+		scoreText = game.add.bitmapText(500, 175, 'font', 'Score: 0', 26);
+		scoreText.setText('Score: ' + score);
+		scoreText.tint = 0x9FAFD9;
+		scoreText.anchor.setTo(0.5);
+
 		// adding player to game
 		this.player = game.add.sprite(game.world.centerX - 20, game.world.centerY, 'spritesheet', 'player0');
 
@@ -266,8 +276,8 @@ function collectBubble(player, bubble)
 	bubble.kill();
 
 	// updates score
-	score += 10;
-	scoreText.text = 'Score: ' + score;
+	score++;
+	scoreText.setText('Score: ' + score);
 
 	// play sound effect
 	plop.play();
