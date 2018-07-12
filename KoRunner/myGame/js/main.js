@@ -29,6 +29,10 @@ Menu.prototype =
 	{
 		console.log('Menu: create');
 
+		// add key capture so pressing keys won't stop focusing on the game
+		game.input.keyboard.addKeyCapture( [Phaser.Keyboard.ESC, Phaser.Keyboard.TAB, Phaser.Keyboard.UP, Phaser.Keyboard.DOWN, Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, Phaser.Keyboard.SPACEBAR,
+		 									Phaser.Keyboard.PAGE_UP, Phaser.Keyboard.PAGE_DOWN, Phaser.Keyboard.SHIFT, Phaser.Keyboard.ENTER, Phaser.Keyboard.CONTROL]);
+
 		// adding background to game
 		this.background = game.add.tileSprite(0, 0, game.width, game.height, 'background');
 		game.add.sprite(120, 20, 'titlescreen');
@@ -187,15 +191,26 @@ Gameplay.prototype =
 		var randSpawn = Math.random() * (10000 - 1) + 1;
 
 		// if the randSpawn is less than 150, then spawn a bubble
-		if(randSpawn > 100 && randSpawn < 1500)
+		if(randSpawn > 100 && randSpawn < 2000)
 		{
 			// calling function to create bubble
 			createBubble();
 		} 
-		// if the randSPawn is between 150 and 200, then spawn a spike
-		else if(randSpawn < 100)
+		// spike spawn rate depending on score
+		if(score < 100)
 		{
-			createSpike();
+			if(randSpawn < 100)
+				createSpike();
+		} 
+		else if(score >= 100 && score < 200)
+		{
+			if(randSpawn < 200)
+				createSpike();
+		}
+		else if(score >= 200)
+		{
+			if(randSpawn < 300)
+				createSpike();
 		}
 
 		// player movement
@@ -340,7 +355,7 @@ function createBubble()
 function createSpike()
 {
 	// generating random numbers for bubble y and spike y positions
-	var randY = Math.random() * (550 - 50) + 50;
+	var randY = Math.random() * (580 - 50) + 50;
 
 	// creating an array of "bubble sprites" and "spike sprites"
 	var spikeList = ['spike0', 'spike1', 'spike2', 'spike3', 'spike4'];
