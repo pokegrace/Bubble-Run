@@ -36,9 +36,8 @@ Menu.prototype =
 		// adding sound to game
 		bubble = game.add.audio('bubble');
 
-		// playing background music, at half volume
-		bubble.volume = 0.3;
-		bubble.play();
+		// looping audio background music at 0.3 volume
+		bubble.loopFull(0.3);
 
 		// for keyboard press 
 		this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -70,7 +69,7 @@ Tutorial.prototype =
 		score = 0;
 
 		// loading tutorialscreen assets
-		game.load.image('background', 'assets/images/background.png');
+		// game.load.image('background', 'assets/images/background.png');
 		game.load.image('tutorialscreen', 'assets/images/tutorialscreen.png');
 	},
 	create: function()
@@ -111,8 +110,12 @@ Gameplay.prototype =
 		// game.load.atlas('key', 'pathtofile.png', 'pathtofile.json');
 		game.load.atlas('spritesheet', 'assets/images/spritesheet.png', 'assets/images/sprites.json');
 
+		// loading particle
+		game.load.image('particle', 'assets/images/particle.png');
+		game.load.image('bubbleparticle', 'assets/images/bubbleparticle.png');
+
 		// loading background image
-		game.load.image('background', 'assets/images/background.png');
+		// game.load.image('background', 'assets/images/background.png');
 
 		// loading sound asset
 		game.load.audio('plop', 'assets/audio/Plop.mp3');
@@ -130,6 +133,15 @@ Gameplay.prototype =
 		// adding score text to game: (x, y, default text, font details)
 		scoreText = game.add.bitmapText(16, 16, 'font', 'Score: 0', 24);
 		scoreText.tint = 0x9FAFD9;
+		scoreText.scale.setTo(0.8, 1);
+
+		// starting physics system
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+
+		// creating initial particle emitter for popping bubbles
+		emitter = game.add.emitter(0, 0, 100);
+		emitter.makeParticles('bubbleparticle');
+		emitter.gravity = 150;
 
 		// for keyboard press
 		this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -243,6 +255,7 @@ Gameover.prototype =
 		scoreText.setText('Score: ' + score);
 		scoreText.tint = 0x9FAFD9;
 		scoreText.anchor.setTo(0.5);
+		scoreText.scale.setTo(0.8, 1);
 
 		// adding player to game
 		this.player = game.add.sprite(game.world.centerX - 20, game.world.centerY, 'spritesheet', 'player0');
@@ -274,6 +287,12 @@ function collectBubble(player, bubble)
 {
 	// removes bubble from game
 	bubble.kill();
+
+	// emit particles
+	emitter.x = player.x + 40;
+	emitter.y = player.y + 20;
+	// emitter.start(explode?, particle lifespan (ms), ignored when using burst mode, how many particles emitted)
+	emitter.start(true, 600, null, 5);
 
 	// updates score
 	score++;
